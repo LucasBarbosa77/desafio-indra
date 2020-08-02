@@ -14,14 +14,27 @@ import kotlinx.coroutines.withContext
 class ListViewModel(private val repository: MoviesRepository) : ViewModel() {
 
     val movies: MutableLiveData<List<Movie>> = MutableLiveData()
-
+    var moviesOrigin: List<Movie>? = arrayListOf()
     fun getPopularMovies() {
         viewModelScope.launch {
             repository.getMovies(success = {
                 movies.postValue(it)
+                moviesOrigin = it
             }, error = {
 
             })
         }
+    }
+
+    fun textSearch(
+        s: CharSequence, start: Int, before: Int,
+        count: Int
+    ) {
+        if (s.length < 2) {
+            movies.value = moviesOrigin
+            return
+        }
+        val filter = moviesOrigin?.filter { l -> l.title.contains(s) }
+        movies.value = filter
     }
 }

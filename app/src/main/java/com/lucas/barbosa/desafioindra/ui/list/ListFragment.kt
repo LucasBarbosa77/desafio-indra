@@ -28,14 +28,13 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentListBinding.inflate(inflater, container, false)
         setUp()
         return binding.root
     }
 
     private fun setUp() {
-
+        binding.viewModel = viewModel
         binding.recyclerMovies.adapter = adapter
 
         viewModel.movies.observe(viewLifecycleOwner, Observer {
