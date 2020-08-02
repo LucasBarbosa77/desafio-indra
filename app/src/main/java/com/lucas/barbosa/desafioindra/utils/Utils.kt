@@ -3,6 +3,8 @@ package com.lucas.barbosa.desafioindra.utils
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.drawable.Drawable
+import android.util.DisplayMetrics
+
 
 fun getProgressBarIndeterminate(context: Context): Drawable? {
     val attrs = intArrayOf(android.R.attr.indeterminateDrawable)
