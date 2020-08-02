@@ -9,7 +9,7 @@ interface MoviesRepository {
         error: (throwable: Throwable) -> Unit
     )
 
-    fun getMovieDetail(
+    suspend fun getMovieDetail(
         movieId: Int,
         success: (reponse: Movie) -> Unit,
         error: (throwable: Throwable) -> Unit

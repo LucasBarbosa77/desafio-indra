@@ -1,15 +1,19 @@
 package com.lucas.barbosa.desafioindra.repository
 
 import com.google.gson.Gson
+import com.lucas.barbosa.desafioindra.data.local.MovieDao
 import com.lucas.barbosa.desafioindra.data.local.models.Movie
 import com.lucas.barbosa.desafioindra.data.network.ApiEndPoint
 import com.lucas.barbosa.desafioindra.data.network.getRetrofitInstance
 import com.lucas.barbosa.desafioindra.data.network.provideApi
 import com.lucas.barbosa.desafioindra.utils.callback
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import org.json.JSONObject
 
-class MoviesRepositoryImpl() : MoviesRepository {
+class MoviesRepositoryImpl(val database: MovieDao) : MoviesRepository {
 
     private val client: ApiEndPoint = provideApi(getRetrofitInstance())
     val gson = Gson()
@@ -33,15 +37,27 @@ class MoviesRepositoryImpl() : MoviesRepository {
         )
     }
 
-    override fun getMovieDetail(
+    override suspend fun getMovieDetail(
         movieId: Int,
         success: (reponse: Movie) -> Unit,
         error: (throwable: Throwable) -> Unit
     ) {
+
+        val movie = database.selectMovie(movieId)
+
+        if (movie != null) {
+            success(movie)
+            return
+        }
+
         client.getMovieDetail(movieId = movieId).enqueue(callback(
             response = { response ->
                 val json = response?.body()?.string().toString()
-                success(gson.fromJson(json, Movie::class.java))
+                val movieClass = gson.fromJson(json, Movie::class.java)
+                success(movieClass)
+                CoroutineScope(Dispatchers.IO).launch {
+                    database.insertMovie(movieClass)
+                }
             },
             failure = { exception ->
                 exception?.let {
