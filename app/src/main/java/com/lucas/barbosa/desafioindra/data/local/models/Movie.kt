@@ -3,6 +3,7 @@ package com.lucas.barbosa.desafioindra.data.local.models
 import android.graphics.Bitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.common.reflect.TypeToken
 import com.google.gson.annotations.SerializedName
@@ -23,10 +24,11 @@ data class Movie(
     val runtime: Int,
     @ColumnInfo(name = "overview")
     @SerializedName("overview")
-    val overview: String,
-    @SerializedName("genres")
-    val genres: List<Genre>
+    val overview: String
 ) {
+    @Ignore
+    @SerializedName("genres")
+    var genres: List<Genre> = arrayListOf()
 
     fun getGenres(): String {
         val genres = StringBuilder()

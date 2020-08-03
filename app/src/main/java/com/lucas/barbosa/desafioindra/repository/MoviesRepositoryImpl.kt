@@ -1,6 +1,7 @@
 package com.lucas.barbosa.desafioindra.repository
 
 import com.google.gson.Gson
+import com.lucas.barbosa.desafioindra.data.local.GenreDao
 import com.lucas.barbosa.desafioindra.data.local.MovieDao
 import com.lucas.barbosa.desafioindra.data.local.models.Movie
 import com.lucas.barbosa.desafioindra.data.network.ApiEndPoint
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import org.json.JSONObject
 
-class MoviesRepositoryImpl(val database: MovieDao) : MoviesRepository {
+class MoviesRepositoryImpl(val movieDao: MovieDao, val genreDao: GenreDao) : MoviesRepository {
 
     private val client: ApiEndPoint = provideApi(getRetrofitInstance())
     val gson = Gson()
@@ -43,9 +44,11 @@ class MoviesRepositoryImpl(val database: MovieDao) : MoviesRepository {
         error: (throwable: Throwable) -> Unit
     ) {
 
-        val movie = database.selectMovie(movieId)
+        val movie = movieDao.selectMovie(movieId)
 
         if (movie != null) {
+            val genres = genreDao.selectGenre(movieId)
+            movie.genres = genres
             success(movie)
             return
         }
@@ -56,7 +59,11 @@ class MoviesRepositoryImpl(val database: MovieDao) : MoviesRepository {
                 val movieClass = gson.fromJson(json, Movie::class.java)
                 success(movieClass)
                 CoroutineScope(Dispatchers.IO).launch {
-                    database.insertMovie(movieClass)
+                    movieDao.insertMovie(movieClass)
+                    movieClass.genres.forEach {
+                        it.movieId = movieClass.id
+                    }
+                    genreDao.insertGenre(movieClass.genres)
                 }
             },
             failure = { exception ->

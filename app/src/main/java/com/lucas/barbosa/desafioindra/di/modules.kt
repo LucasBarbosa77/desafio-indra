@@ -2,6 +2,7 @@ package com.lucas.barbosa.desafioindra.di
 
 import androidx.room.Room
 import com.lucas.barbosa.desafioindra.data.local.AppDatabase
+import com.lucas.barbosa.desafioindra.data.local.MIGRATION_1_2
 import com.lucas.barbosa.desafioindra.repository.MoviesRepository
 import com.lucas.barbosa.desafioindra.repository.MoviesRepositoryImpl
 import com.lucas.barbosa.desafioindra.ui.detail.DetailViewModel
@@ -13,11 +14,13 @@ import org.koin.dsl.module
 var appModules = module {
 
     single {
-        Room.databaseBuilder(androidApplication(), AppDatabase::class.java, "movieList").build()
+        Room.databaseBuilder(androidApplication(), AppDatabase::class.java, "movieList")
+            .addMigrations(MIGRATION_1_2).build()
     }
 
     single { get<AppDatabase>().movieDao() }
-    factory<MoviesRepository> { MoviesRepositoryImpl(get()) }
+    single { get<AppDatabase>().genreDao() }
+    factory<MoviesRepository> { MoviesRepositoryImpl(get(), get()) }
 }
 
 var viewModels = module {
