@@ -7,8 +7,8 @@ plugins {
 }
 
 android {
-    compileSdkVersion(30)
-    buildToolsVersion = "30.0.1"
+    compileSdkVersion(29)
+    buildToolsVersion = "29.0.1"
 
     defaultConfig {
         applicationId = "com.lucas.barbosa.desafioindra"
