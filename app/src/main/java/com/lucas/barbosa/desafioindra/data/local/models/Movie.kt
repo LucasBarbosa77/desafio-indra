@@ -36,8 +36,10 @@ data class Movie(
             genres.append(genre.name)
             genres.append(", ")
         }
-        genres.deleteCharAt(genres.lastIndex)
-        genres.deleteCharAt(genres.lastIndex)
+        if(genres.isNotEmpty()){
+            genres.deleteCharAt(genres.lastIndex)
+            genres.deleteCharAt(genres.lastIndex)
+        }
         return genres.toString()
     }
 
