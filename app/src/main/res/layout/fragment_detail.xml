@@ -13,6 +13,17 @@
             android:layout_height="match_parent"
             android:background="@color/black">
 
+            <ProgressBar
+                android:id="@+id/loading"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:indeterminateTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_poster"
                 android:layout_width="0dp"
@@ -32,9 +43,10 @@
                     <ImageView
                         android:id="@+id/movie_poster"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:adjustViewBounds="true"
+                        android:background="#001E96"
                         android:scaleType="fitStart"
                         tools:src="@drawable/test" />
                 </LinearLayout>

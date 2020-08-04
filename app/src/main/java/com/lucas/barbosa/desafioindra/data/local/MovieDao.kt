@@ -9,7 +9,7 @@ import com.lucas.barbosa.desafioindra.data.local.models.Movie
 @Dao
 interface MovieDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovie(movie: Movie)
 
     @Query("select * from movie where id = :id")

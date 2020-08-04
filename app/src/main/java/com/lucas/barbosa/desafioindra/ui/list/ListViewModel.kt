@@ -30,11 +30,12 @@ class ListViewModel(private val repository: MoviesRepository) : ViewModel() {
         s: CharSequence, start: Int, before: Int,
         count: Int
     ) {
-        if (s.length < 2) {
+        if (s.isEmpty() || s.length < 2) {
             movies.value = moviesOrigin
             return
         }
-        val filter = moviesOrigin?.filter { l -> l.title.contains(s) }
+        val filter =
+            moviesOrigin?.filter { l -> l.title.toLowerCase().contains(s.toString().toLowerCase()) }
         movies.value = filter
     }
 }

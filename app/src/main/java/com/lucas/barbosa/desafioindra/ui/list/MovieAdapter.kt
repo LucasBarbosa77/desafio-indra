@@ -36,7 +36,6 @@ class MovieAdapter(private var movies: List<Movie>, private val context: Context
         Picasso.get()
             .load("http://image.tmdb.org/t/p/w185/" + movie.postPath)
             .placeholder(getProgressBarIndeterminate(context)!!)
-            .fit()
             .into(holder.movieImage)
     }
 

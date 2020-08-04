@@ -23,7 +23,7 @@ class MoviesRepositoryImpl(val movieDao: MovieDao, val genreDao: GenreDao) : Mov
         success: (reponse: List<Movie>) -> Unit,
         error: (throwable: Throwable) -> Unit
     ) {
-        client.getMoviesPopular().enqueue(
+        client.getMoviesPopular(language = "").enqueue(
             callback(
                 response = { response ->
                     val results: String = getResults(response?.body())
@@ -53,7 +53,7 @@ class MoviesRepositoryImpl(val movieDao: MovieDao, val genreDao: GenreDao) : Mov
             return
         }
 
-        client.getMovieDetail(movieId = movieId).enqueue(callback(
+        client.getMovieDetail(movieId = movieId,language = "").enqueue(callback(
             response = { response ->
                 val json = response?.body()?.string().toString()
                 val movieClass = gson.fromJson(json, Movie::class.java)

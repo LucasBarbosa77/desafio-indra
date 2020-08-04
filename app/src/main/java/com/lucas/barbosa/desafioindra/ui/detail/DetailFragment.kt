@@ -32,6 +32,26 @@ class DetailFragment : Fragment() {
         val movieId = arguments?.getInt("movieId")
         viewModel.getMovieDetail(movieId!!)
 
+        viewModel.loading.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                binding.movieTitle.visibility = View.GONE
+                binding.movieOverview.visibility = View.GONE
+                binding.moviePoster.visibility = View.GONE
+                binding.movieRuntime.visibility = View.GONE
+                binding.movieGenres.visibility = View.GONE
+                binding.loading.visibility = View.VISIBLE
+                return@Observer
+            }
+            binding.movieTitle.visibility = View.VISIBLE
+            binding.movieOverview.visibility = View.VISIBLE
+            binding.moviePoster.visibility = View.VISIBLE
+            binding.movieRuntime.visibility = View.VISIBLE
+            binding.movieGenres.visibility = View.VISIBLE
+            binding.loading.visibility = View.GONE
+            return@Observer
+
+        })
+
         viewModel.movie.observe(viewLifecycleOwner, Observer {
             binding.movieTitle.text = it.title
             binding.movieOverview.text = it.overview

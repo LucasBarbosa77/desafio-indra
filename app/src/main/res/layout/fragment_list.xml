@@ -37,6 +37,7 @@
                 android:drawableStart="@drawable/ic_search_24px"
                 android:drawableTint="@color/white"
                 android:onTextChanged="@{viewModel.textSearch}"
+                android:singleLine="true"
                 android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
